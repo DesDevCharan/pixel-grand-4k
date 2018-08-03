@@ -1,0 +1,74 @@
+﻿<html>
+
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <title>Ozone Place Search</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbzjWA_S2xsz-kZ-7Ya55AjVpdQFT9RDs&libraries=places"></script>
+</head>
+
+<body style="margin:0px; padding:0px;height: inherit; width:inherit;  position:relative; top: 0px;" onload="initialize()">
+    <form name="controls" style="height: inherit; width: inherit;">
+        <div class="map-container">
+            <div id="map_canvas">
+            </div>
+            <div id="ImageSet">
+                <img alt="img" src="http://www.maddog.in/reia/ozone_location/ozoneicon.png" width="250" onclick="CenterControl()">
+                <div class="well">
+                        <div class="panel-group" id="accordion">
+                                <div class="panel panel-default">
+                                  <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                      <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Essentials</a>
+                                    </h4>
+                                  </div>
+                                  <div id="collapse1" class="panel-collapse collapse in">
+                                    <div class="panel-body">Lorem iis nisi ut aliquip ex ea commodo consequat.</div>
+                                  </div>
+                                </div>
+                                <div class="panel panel-default">
+                                  <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                      <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Amenities</a>
+                                    </h4>
+                                  </div>
+                                  <div id="collapse2" class="panel-collapse collapse">
+                                    <div class="panel-body">is nisi ut aliquip ex ea commodo consequat.</div>
+                                  </div>
+                                </div>
+                                <div class="panel panel-default">
+                                  <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                      <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Entertainment</a>
+                                    </h4>
+                                  </div>
+                                  <div id="collapse3" class="panel-collapse collapse">
+                                    <div class="panel-body"> ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
+                                  </div>
+                                </div>
+                                <div class="panel panel-default">
+                                  <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                      <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Commute</a>
+                                    </h4>
+                                  </div>
+                                  <div id="collapse3" class="panel-collapse collapse">
+                                    <div class="panel-body"> ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
+                                  </div>
+                                </div>
+                              </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </form>
+
+    <script type="text/javascript" src="script.js"></script>
