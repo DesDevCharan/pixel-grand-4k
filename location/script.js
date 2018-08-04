@@ -1,4 +1,3 @@
-
 $('.tree-toggle').click(function () {
   $(this).parent().children('ul.tree').toggle(200);
 });
@@ -16,6 +15,8 @@ var imags = 'http://www.maddog.in/reia/ozone_location/ozoneicon.png';
 var distance;
 var myLatlng = new google.maps.LatLng(22.452669, 88.394917);
 var destination = new google.maps.LatLng(22.452015, 88.393193);
+var menuItems = ['Hospitals', 'Schools', 'Restaurants', 'Banks', 'Store'];
+loadMenu();
 
 function ZoomControl(controlDiv, map) {
 
@@ -61,6 +62,7 @@ function ZoomControl(controlDiv, map) {
   });
 
 }
+
 function initialize() {
   //var myLatlng = new google.maps.LatLng(22.452669, 88.394917);
   //var destination = new google.maps.LatLng(223.452669, 883.394917);
@@ -70,18 +72,16 @@ function initialize() {
 
   var myOptions = {
     zoom: 16.3,
-    disableDefaultUI: true,
+    disableDefaultUI: false,
     center: myLatlng,
     scrollwheel: false,
     zoomControl: true,
-    styles: [
-      {
-        "featureType": "poi",
-        "stylers": [
-          { "visibility": "off" }
-        ]
-      }
-    ],
+    styles: [{
+      "featureType": "poi",
+      "stylers": [{
+        "visibility": "off"
+      }]
+    }],
     mapTypeId: google.maps.MapTypeId.ROADMAP,
     //icon: imags
   }
@@ -120,6 +120,7 @@ function CenterControl() {
   });
 
 }
+
 function maiiw() {
   var beachMarker = new google.maps.Marker({
     position: myLatlng,
@@ -155,48 +156,51 @@ function showSelectedPlace() {
 
 function search() {
   maiiw();
-  var type;
-  for (var i = 0; i < document.controls.type.length; i++) {
-    if (document.controls.type[i].checked) {
-      type = document.controls.type[i].value;
-    }
-  }
-
-  autocomplete.setBounds(map.getBounds());
-
-  var search = {
-    bounds: map.getBounds()
-  };
-
-  if (type != 'establishment') {
-    search.types = [type];
-  }
-
-
-  places.search(search, function (results, status) {
-    if (status == google.maps.places.PlacesServiceStatus.OK) {
-      clearResults();
-      clearMarkers();
-      for (var i = 0; i < results.length; i++) {
-        markers[i] = new google.maps.Marker({
-
-          position: results[i].geometry.location,
-          //animation: google.maps.Animation.DROP	
-          icon: 'http://www.maddog.in/reia/ozone_location/locmark.png'
-
-        });
-        google.maps.event.addListener(markers[i], 'click', getDetails(results[i], i));
-        setTimeout(dropMarker(i), i * 100);
-        addResult(results[i], i);
-
+  let type = '';
+  setTimeout(() => {
+    let txt = $('.panel-heading').not('.collapsed').find('a').text().toLowerCase();
+    type = txt.slice(-1) === 's' ? txt.slice(0, -1) : txt;
+    if (type) {
+      autocomplete.setBounds(map.getBounds());
+      var search = {
+        bounds: map.getBounds()
+      };
+      if (type != 'establishment') {
+        search.types = [type];
       }
+      places.search(search, function (results, status) {
+        if (status == google.maps.places.PlacesServiceStatus.OK) {
+          // clearResults(); 
+          clearMarkers();
+          for (var i = 0; i < results.length; i++) {
+            markers[i] = new google.maps.Marker({
+
+              position: results[i].geometry.location,
+              //animation: google.maps.Animation.DROP	
+              icon: 'http://www.maddog.in/reia/ozone_location/locmark.png'
+
+            });
+            google.maps.event.addListener(markers[i], 'click', getDetails(results[i], i));
+            setTimeout(dropMarker(i), i * 100);
+            addResult(results[i], i);
+          }
+        } else if (status === 'ZERO_RESULTS' && results.length === 0) {
+          showZeroResult(txt);
+        }
+      })
+    } else {
+      showZeroResult(txt);
     }
-  })
-  console.log("any message");
+  }, 0);
+}
 
-
-
-
+function showZeroResult(txt) {
+  clearResults();
+  let results = $('.in');
+  let anchor = document.createElement('a');
+  anchor.setAttribute("class", "list-group-item");
+  anchor.innerHTML = 'No ' + txt + ' nearby';
+  results.html(anchor);
 }
 
 function getDistance(p1, p2) {
@@ -217,6 +221,7 @@ function getDistance(p1, p2) {
   //Console.log("%f ",d, "background: blue; color: black; padding-left:10px;");
   // returns the distance in meter
 };
+
 function clearMarkers() {
   for (var i = 0; i < markers.length; i++) {
     if (markers[i]) {
@@ -233,32 +238,32 @@ function dropMarker(i) {
 }
 
 function addResult(result, i) {
-  var results = document.getElementById("results");
-  var tr = document.createElement('tr');
-  tr.style.backgroundColor = (i % 2 == 0 ? '#F0F0F0' : '#FFFFFF');
-  tr.onclick = function () {
+  let results = $('.in');
+  resHeight = window.innerHeight / 3;
+  results.css('max-height: ' + resHeight);
+  results.css('overflow: auto');
+  let anchor = document.createElement('a');
+  anchor.onclick = function () {
+   $.each($('.list-group-item'), (item) => {
+    item.removeAttribute('class', 'active')
+   });
+   anchor.setAttribute('class', 'active');
     google.maps.event.trigger(markers[i], 'click');
   };
-
-  var iconTd = document.createElement('td');
-  var nameTd = document.createElement('td');
-  var icon = document.createElement('img');
+  let icon = document.createElement('img');
   icon.src = result.icon;
+  anchor.setAttribute("class", "list-group-item");
   icon.setAttribute("class", "placeIcon");
   icon.setAttribute("className", "placeIcon");
-  var name = document.createTextNode(result.name);
-  iconTd.appendChild(icon);
-  nameTd.appendChild(name);
-  tr.appendChild(iconTd);
-  tr.appendChild(nameTd);
-  results.appendChild(tr);
+  let name = document.createTextNode(result.name);
+  anchor.appendChild(icon);
+  anchor.appendChild(name);
+  results.append(anchor);
 }
 
 function clearResults() {
-  var results = document.getElementById("results");
-  while (results.childNodes[0]) {
-    results.removeChild(results.childNodes[0]);
-  }
+  var results = $('.in');
+  results.html('');
 }
 
 function getDetails(result, i) {
@@ -304,4 +309,25 @@ function getIWContent(place) {
   content += '<td><b>' + ", Distance " + Math.round(distance) + "m" + '</b>';
   content += '</td></tr></table>';
   return content;
+}
+
+function loadMenu() {
+  let panel = ''
+  $.each(menuItems, (index, item) => {
+    panel += `<div class="panel panel-default">
+                  <div class="panel-heading ${ index > 0 ? 'collapsed' : '' }" onclick="search()" data-toggle="collapse" data-parent="#accordion" href="#collapse${ index + 1 }">
+                      <h4 class="panel-title">
+                        <a>${ item }</a>
+                      </h4>
+                    </div>
+                    <div id="collapse${ index + 1 }" class="panel-collapse ${ index === 0 ? 'collapse in' : '' }">
+                      <div class="panel-body">
+                        <div class="list-group result-group">
+                        </div>
+                      </div>
+                    </div>
+                  </div>`;
+  });
+  $('#accordion').html(panel);
+
 }

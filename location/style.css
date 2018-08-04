@@ -25,13 +25,10 @@ body {
     
     position: absolute;
     left: 3%;
-    top: 10%;
-    /* height: 40%;
-    width: 20%;
-    top: 0px;
-    right: 0px; 
-    border: 5px solid black;
-    background: snow; */
+    top: 5%;
+    max-height: 80%;
+    background: transparent;
+    overflow: auto;
 }
 
 #controls {
@@ -43,9 +40,8 @@ body {
 
 
 .placeIcon {
-    width: 16px;
-    height: 30px;
-    margin: 7px;
+    height: 15px;
+    margin: 2px 2px 0 0;
 }
 
 .big {
@@ -89,107 +85,31 @@ div.well {
   max-width: 250px;
 }
 
-.glyphicon-icon-rpad .glyphicon,
-.glyphicon-icon-rpad .glyphicon.m8,
-.fa-icon-rpad .fa,
-.fa-icon-rpad .fa.m8 {
-    padding-right: 8px;
+.panel-heading {
+    cursor: pointer;
 }
 
-.glyphicon-icon-lpad .glyphicon,
-.glyphicon-icon-lpad .glyphicon.m8,
-.fa-icon-lpad .fa,
-.fa-icon-lpad .fa.m8 {
-    padding-left: 8px;
+.panel-body {
+    padding: 0;
 }
 
-.glyphicon-icon-rpad .glyphicon.m5,
-.fa-icon-rpad .fa.m5 {
-    padding-right: 5px;
+.panel-body .list-group{
+    margin-bottom: 0;
 }
 
-.glyphicon-icon-lpad .glyphicon.m5,
-.fa-icon-lpad .fa.m5 {
-    padding-left: 5px;
+a.list-group-item {
+    display: flex;
+    padding: 5px 5px 5px 10px;
 }
 
-.glyphicon-icon-rpad .glyphicon.m12,
-.fa-icon-rpad .fa.m12 {
-    padding-right: 12px;
+.panel-heading a:hover {
+    text-decoration: unset;
 }
 
-.glyphicon-icon-lpad .glyphicon.m12,
-.fa-icon-lpad .fa.m12 {
-    padding-left: 12px;
+.menu-container {
+    background: transparent;
 }
 
-.glyphicon-icon-rpad .glyphicon.m15,
-.fa-icon-rpad .fa.m15 {
-    padding-right: 15px;
-}
-
-.glyphicon-icon-lpad .glyphicon.m15,
-.fa-icon-lpad .fa.m15 {
-    padding-left: 15px;
-}
-
-ul.nav-menu-list-style .nav-header .menu-collapsible-icon {
-    position: absolute;
-    right: 15px;
-    top: 18px;
-    font-size: 9px;
-}
-
-ul.nav-menu-list-style {
-    margin: 0;
-}
-
-ul.nav-menu-list-style .nav-header {
-    border-top: 1px solid #FFFFFF;
-    border-bottom: 1px solid #e8e8e8;
-    display: block;
-    margin: 0;
-    line-height: 42px;
-    padding: 0 8px;
-    font-weight: 600;
-}
-
-ul.nav-menu-list-style li {
-    position: relative;
-}
-
-ul.nav-menu-list-style li a {
-    border-top: 1px solid #FFFFFF;
-    border-bottom: 1px solid #e8e8e8;
-    padding: 0 10px;
-    line-height: 32px;
-}
-
-ul.nav-menu-list-style li:first-child a {}
-
-ul.nav-menu-list-style {
-    list-style: none;
-    padding: 0px;
-    margin: 0px;
-}
-
-ul.nav-menu-list-style li .badge,
-ul.nav-menu-list-style li .pull-right,
-ul.nav-menu-list-style li span.badge,
-ul.nav-menu-list-style li label.badge {
-    float: right;
-    margin-top: 7px;
-}
-
-.ul.kas-icon-aero {}
-
-ul.kas-icon-aero li a:before {
-    font-family: 'Glyphicons Halflings';
-    font-size: 9px;
-    content: "\e258";
-    padding-right: 8px;
-}
-
-.dropdrown-tree {
-  background: whitesmoke;
+.list-group-item.active {
+    background: red;
 }
