@@ -130,13 +130,16 @@ function maiiw() {
   });
 }
 
-
+function tileSearch() {
+  let id = $('.in').first().attr('id').slice(-1);
+  search(id);
+}
 
 function tilesLoaded() {
   google.maps.event.clearListeners(map, 'tilesloaded');
-  google.maps.event.addListener(map, 'zoom_changed', search);
-  google.maps.event.addListener(map, 'dragend', search);
-  search();
+  google.maps.event.addListener(map, 'zoom_changed', tileSearch);
+  google.maps.event.addListener(map, 'dragend', tileSearch);
+  tileSearch();
 }
 
 function showSelectedPlace() {
@@ -154,7 +157,7 @@ function showSelectedPlace() {
   iw.open(map, markers[0]);
 }
 
-function search() {
+function search(index) {
   maiiw();
   let type = '';
   setTimeout(() => {
@@ -173,7 +176,8 @@ function search() {
           clearResults(); 
           clearMarkers();
           let htmlList = '';
-          let parentDiv = $('.in').length === 0 ? $('.collapsing') : $('.in');
+          let parentDiv = $('#collapse' + index);
+          parentDiv = parentDiv.first();
           parentDiv.css('max-height', (window.innerHeight / 3));
           parentDiv.css('overflow', 'auto');
           for (var i = 0; i < results.length; i++) {
@@ -188,17 +192,19 @@ function search() {
           }          
         } else if (status === 'ZERO_RESULTS' && results.length === 0) {
           showZeroResult(txt);
+          clearMarkers();
         }
       })
     } else {
       showZeroResult(txt);
+      clearMarkers();
     }
-  }, 0);
+  }, 10);
 }
 
 function showZeroResult(txt) {
   clearResults();
-  let results = $('.in');
+  let results =  $('.in').length === 0 ? $('.collapsing') : $('.in');
   let anchor = document.createElement('a');
   anchor.setAttribute("class", "list-group-item");
   anchor.innerHTML = 'No ' + txt + ' nearby';
@@ -241,18 +247,18 @@ function dropMarker(i) {
 
 function addResult(result, i) {
   let anchor = document.createElement('a');
-  anchor.onclick = function () {
-   $.each($('.list-group-item'), (item) => {
-    item.removeAttribute('class', 'active')
+  anchor.href = 'javascript:void(0);'
+  anchor.addEventListener('click', function () {
+   $.each($('.list-group-item'), (index, item) => {
+    item.classList.remove('active')
    });
-   anchor.setAttribute('class', 'active');
+   anchor.classList.add('class', 'active');
     google.maps.event.trigger(markers[i], 'click');
-  };
+  });
   let icon = document.createElement('img');
   icon.src = result.icon;
-  anchor.setAttribute("class", "list-group-item");
-  icon.setAttribute("class", "placeIcon");
-  icon.setAttribute("className", "placeIcon");
+  anchor.classList.add("list-group-item");
+  icon.classList.add("placeIcon");
   let name = document.createTextNode(result.name);
   anchor.appendChild(icon);
   anchor.appendChild(name);
@@ -260,8 +266,9 @@ function addResult(result, i) {
 }
 
 function clearResults() {
-  var results = $('.in').length === 0 ? $('.collapsing') : $('.in')
-  results.html('');
+  $('.panel-collapse').each(function(i, listPanels) {
+    listPanels.innerHTML = '';
+});
 }
 
 function getDetails(result, i) {
@@ -310,10 +317,11 @@ function getIWContent(place) {
 }
 
 function loadMenu() {
+  $('#accordion').html('');
   let panel = ''
   $.each(menuItems, (index, item) => {
     panel += `<div class="panel panel-default">
-                  <div class="panel-heading ${ index > 0 ? 'collapsed' : '' }" onclick="search()" data-toggle="collapse" data-parent="#accordion" href="#collapse${ index + 1 }">
+                  <div class="panel-heading ${ index > 0 ? 'collapsed' : '' }" onclick="search(${ index + 1 })" data-toggle="collapse" data-parent="#accordion" href="#collapse${ index + 1 }">
                       <h4 class="panel-title">
                         <a>${ item }</a>
                       </h4>
