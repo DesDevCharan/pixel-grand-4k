@@ -101,7 +101,7 @@ function initialize() {
 
   map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
   var zoomControlDiv = document.createElement('div');
-  var zoomControl = new ZoomControl(zoomControlDiv, map);
+  // var zoomControl = new ZoomControl(zoomControlDiv, map);
 
   zoomControlDiv.index = 1;
   map.controls[google.maps.ControlPosition.BOTTOM_RIGHT].push(zoomControlDiv);
