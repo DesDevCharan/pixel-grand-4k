@@ -170,20 +170,22 @@ function search() {
       }
       places.search(search, function (results, status) {
         if (status == google.maps.places.PlacesServiceStatus.OK) {
-          // clearResults(); 
+          clearResults(); 
           clearMarkers();
+          let htmlList = '';
+          let parentDiv = $('.in').length === 0 ? $('.collapsing') : $('.in');
+          parentDiv.css('max-height', (window.innerHeight / 3));
+          parentDiv.css('overflow', 'auto');
           for (var i = 0; i < results.length; i++) {
             markers[i] = new google.maps.Marker({
-
               position: results[i].geometry.location,
-              //animation: google.maps.Animation.DROP	
+              // animation: google.maps.Animation.DROP	,
               icon: 'http://www.maddog.in/reia/ozone_location/locmark.png'
-
             });
             google.maps.event.addListener(markers[i], 'click', getDetails(results[i], i));
             setTimeout(dropMarker(i), i * 100);
-            addResult(results[i], i);
-          }
+            parentDiv.append(addResult(results[i], i));
+          }          
         } else if (status === 'ZERO_RESULTS' && results.length === 0) {
           showZeroResult(txt);
         }
@@ -238,10 +240,6 @@ function dropMarker(i) {
 }
 
 function addResult(result, i) {
-  let results = $('.in');
-  resHeight = window.innerHeight / 3;
-  results.css('max-height: ' + resHeight);
-  results.css('overflow: auto');
   let anchor = document.createElement('a');
   anchor.onclick = function () {
    $.each($('.list-group-item'), (item) => {
@@ -258,11 +256,11 @@ function addResult(result, i) {
   let name = document.createTextNode(result.name);
   anchor.appendChild(icon);
   anchor.appendChild(name);
-  results.append(anchor);
+  return anchor;
 }
 
 function clearResults() {
-  var results = $('.in');
+  var results = $('.in').length === 0 ? $('.collapsing') : $('.in')
   results.html('');
 }
 

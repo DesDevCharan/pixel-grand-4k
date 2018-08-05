@@ -28,7 +28,6 @@ body {
     top: 5%;
     max-height: 80%;
     background: transparent;
-    overflow: auto;
 }
 
 #controls {
@@ -72,7 +71,7 @@ body {
 #results {
     height: 20%;
     border: 5px solid black;
-    overflow: scroll;
+    /* overflow: scroll; */
 }
 
 
