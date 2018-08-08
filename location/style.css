@@ -3,6 +3,7 @@ body {
     height: 100%;
     width: 100%;
     position: absolute;
+    font-size: 14px;
 }
 
 #map_canvas {
@@ -40,7 +41,7 @@ body {
 
 .placeIcon {
     height: 15px;
-    margin: 2px 2px 0 0;
+    margin: 0 2px 0 0;
 }
 
 .big {
@@ -79,9 +80,13 @@ body {
     padding: 0px;
 }
 
+.logo-img {
+    width: 300px;
+}
+
 div.well {
   position: relative;
-  max-width: 250px;
+  max-width: 300px;
 }
 
 .panel-heading {
@@ -112,3 +117,185 @@ a.list-group-item {
 .list-group-item.active {
     background: red;
 } */
+
+span.loc-name {
+    padding-right: 40px
+}
+
+.list-group-item span.distance-from-src {
+    position: absolute;
+    right: 5px;
+    color: darkgray;
+    font-weight: bold;
+}
+
+.list-group-item.active span.distance-from-src {
+    color: white;
+}
+
+
+.gm-custom-controlls {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    bottom: 10% !important;
+    position: absolute !important;
+}
+
+.gm-zoom-slider {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.zoom-button {
+    background: transparent;
+    opacity: 0.7;
+    border: transparent;
+    font-weight: bold;
+    font-size: large;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.gm-custom-controlls input {
+    -webkit-appearance: none;
+    width: 50%;
+    height: 10px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.8;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+.gm-custom-controlls input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: steelblue;
+    cursor: pointer;
+}
+
+.gm-custom-controlls input::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: steelblue;
+    cursor: pointer;
+}
+
+
+@media screen and (min-width: 1600px) {
+    body, .panel-title, .gm-style-iw, td {
+        font-size: 18px !important;
+    }
+
+    .panel-heading {
+        padding: 15px 10px;
+    }
+
+    a.list-group-item {
+        padding: 10px;
+    }
+
+    .placeIcon {
+        height: 20px;
+        margin: 0 10px 0 0;
+    }
+
+    .logo-img {
+        width: 300px;
+    }
+    
+    div.well {
+      position: relative;
+      max-width: 300px;
+    }
+    
+    
+    .zoom-button {
+        font-weight: 700;
+        font-size: 30px;
+        padding: 20px
+     }
+ 
+     .gm-custom-controlls input {
+         width: 60%;
+         height: 15px;
+     }
+ 
+     .gm-custom-controlls input::-webkit-slider-thumb {
+         width: 40px;
+         height: 40px;
+     }
+         
+     .gm-custom-controlls input::-moz-range-thumb {
+         width: 40px;
+         height: 40px;
+     }
+     
+    .recenter-button, .recenter-button div {
+        font-size: 18px !important;
+        line-height: 50px;
+        padding: 10px;
+    }
+
+         
+  }
+  @media screen and (min-width: 1900px) {
+    body, .panel-title, .gm-style-iw, td {
+        font-size: 20px !important;
+    }
+
+    .recenter-button, .recenter-button div {
+        font-size: 20px !important;
+        line-height: 50px;
+        padding: 10px;
+    }
+
+    .panel-heading {
+        padding: 20px 15px;
+    }
+
+    a.list-group-item {
+        padding: 20px;
+    }
+
+    .placeIcon {
+        height: 25px;
+        margin: 0 10px 0 0;
+    }
+
+    .logo-img {
+        width: 500px;
+    }
+    
+    div.well {
+      position: relative;
+      max-width: 500px;
+    }
+        
+    .zoom-button {
+       font-weight: 700;
+       font-size: 40px;
+       padding: 30px
+    }
+
+    .gm-custom-controlls input {
+        width: 60%;
+        height: 15px;
+    }
+
+    .gm-custom-controlls input::-webkit-slider-thumb {
+        width: 50px;
+        height: 50px;
+    }
+        
+    .gm-custom-controlls input::-moz-range-thumb {
+        width: 50px;
+        height: 50px;
+    }
+        
+  }

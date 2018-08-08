@@ -66,8 +66,8 @@ function ZoomControl(controlDiv, map) {
 function initialize() {
   //var myLatlng = new google.maps.LatLng(22.452669, 88.394917);
   //var destination = new google.maps.LatLng(223.452669, 883.394917);
-  gestureHandling: 'none'
-  zoomControl: false
+  // gestureHandling: 'none'
+  // zoomControl: false
 
 
   var myOptions = {
@@ -75,36 +75,69 @@ function initialize() {
     disableDefaultUI: false,
     center: myLatlng,
     scrollwheel: false,
-    zoomControl: true,
+    zoomControl: false,
+    minZoom: 5,
+    maxZoom: 20,
+    zoomControlOptions: {
+      style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+      position: google.maps.ControlPosition.BOTTOM
+    },
+    mapTypeControlOptions: {
+      style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+      position: google.maps.ControlPosition.TOP_RIGHT
+    },
+    gestureHandling: 'cooperative',
+    scaleControl: false,
     styles: [{
       "featureType": "poi",
       "stylers": [{
         "visibility": "off"
       }]
     }],
-    mapTypeId: google.maps.MapTypeId.ROADMAP,
-    //icon: imags
+    mapTypeId: google.maps.MapTypeId.ROADMAP
   }
 
-
+  
+  
+  
   /*googleMap.addMarker(new MarkerOptions()
   .position(myLatlng)
   .title("OZONE")
   .showInfoWindow();
   
-   
-/*var images = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';*/
-
-
-
+  
+  /*var images = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';*/
+  
+  
+  
   //scaleControl: true
-
+  
   map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-  var zoomControlDiv = document.createElement('div');
+  // var zoomControlDiv = document.createElement('div');
   // var zoomControl = new ZoomControl(zoomControlDiv, map);
+  
+  // center reposition control
+  var centerControlDiv = document.createElement('div');
+  var centerControl = new CenterControl(centerControlDiv, map);
+  centerControlDiv.index = 1;
+  map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
 
+
+  // zoom slider control
+  var zoomControlDiv = document.createElement('div');
+  zoomControlDiv.setAttribute("class", "gm-custom-controlls");
   zoomControlDiv.index = 1;
-  map.controls[google.maps.ControlPosition.BOTTOM_RIGHT].push(zoomControlDiv);
+
+  // Add custom zoom controlls
+  var centerControl = new ZoomSliderControl(zoomControlDiv, map, map.minZoom, map.maxZoom, map.zoom);
+
+  // map custom controlls to map
+  map.controls[google.maps.ControlPosition.BOTTOM].push(zoomControlDiv);
+
+
+  
+  // zoomControlDiv.index = 1;
+  // map.controls[google.maps.ControlPosition.BOTTOM_RIGHT].push(zoomControlDiv);
   places = new google.maps.places.PlacesService(map);
   google.maps.event.addListener(map, 'tilesloaded', tilesLoaded);
   autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocomplete'));
@@ -113,13 +146,92 @@ function initialize() {
   });
 }
 
-function CenterControl() {
-  console.log("worked");
-  ImageSet.addEventListener('click', function () {
-    map.setCenter(myLatlng);
+function CenterControl(controlDiv, map) {
+
+  // Set CSS for the control border.
+  var controlUI = document.createElement('div');
+  controlUI.classList.add('recenter-button')
+  controlUI.style.backgroundColor = '#fff';
+  controlUI.style.border = '2px solid #fff';
+  controlUI.style.borderRadius = '3px';
+  controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+  controlUI.style.cursor = 'pointer';
+  controlUI.style.marginBottom = '22px';
+  controlUI.style.textAlign = 'center';
+  controlUI.title = 'Click to recenter the map';
+  controlDiv.appendChild(controlUI);
+
+  // Set CSS for the control interior.
+  var controlText = document.createElement('div');
+  controlText.style.color = 'rgb(25,25,25)';
+  controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+  controlText.style.fontSize = '16px';
+  controlText.style.lineHeight = '38px';
+  controlText.style.paddingLeft = '5px';
+  controlText.style.paddingRight = '5px';
+  controlText.innerHTML = 'Center Map';
+  controlUI.appendChild(controlText);
+
+  controlUI.addEventListener('click', function() {
+    map.setCenter(myLatlng, 10);
   });
 
 }
+
+function ZoomSliderControl(controlDiv, map, min, max, currentZoom) {
+
+  var parentDiv = document.createElement('div');
+  parentDiv.setAttribute("class", "gm-zoom-slider");
+
+  var controlUI = document.createElement('input');
+  controlUI.type = 'range';
+  controlUI.value = currentZoom;
+  controlUI.min = min;
+  controlUI.max = max;
+  controlUI.style.width = "400px";
+
+  // Add zoom controlls
+  var incControlls = document.createElement('div');
+  incControlls.id = 'gm-zoom-inc';
+  incControlls.classList.add('zoom-button');
+  incControlls.innerHTML = '+';
+
+  var decControlls = document.createElement('div');
+  decControlls.id = 'gm-zoom-dec';
+  decControlls.classList.add('zoom-button');
+  decControlls.innerHTML = '-';
+
+  parentDiv.appendChild(decControlls);
+  parentDiv.appendChild(controlUI);
+  parentDiv.appendChild(incControlls);
+
+  controlDiv.appendChild(parentDiv);
+
+  // Click event listner for side-bar
+
+  google.maps.event.addDomListener(controlUI, 'click', function () {
+    map.setZoom(parseFloat(controlUI.value));
+  });
+
+  google.maps.event.addDomListener(controlUI, 'touchend', function () {
+    map.setZoom(parseFloat(controlUI.value));
+  });
+  
+
+  google.maps.event.addDomListener(incControlls, 'click', function () {
+    map.setZoom(map.getZoom() + 1);
+  });
+
+  google.maps.event.addDomListener(decControlls, 'click', function () {
+    map.setZoom(map.getZoom() + -1);
+  });
+
+  // Set slider value on zoom change 
+  google.maps.event.addListener(map, 'zoom_changed', function(){
+    controlUI.value = map.getZoom();
+  });
+}
+
 
 function maiiw() {
   var beachMarker = new google.maps.Marker({
@@ -155,6 +267,11 @@ function showSelectedPlace() {
     content: getIWContent(place)
   });
   iw.open(map, markers[0]);
+}
+
+function transitLayer() {
+  var transitLayer = new google.maps.TransitLayer();
+  transitLayer.setMap(map);
 }
 
 function search(index) {
@@ -206,7 +323,7 @@ function showZeroResult(txt) {
   clearResults();
   let results =  $('.in').length === 0 ? $('.collapsing') : $('.in');
   let anchor = document.createElement('a');
-  anchor.setAttribute("class", "list-group-item");
+  anchor.classList.add("list-group-item");
   anchor.innerHTML = 'No ' + txt + ' nearby';
   results.html(anchor);
 }
@@ -223,11 +340,7 @@ function getDistance(p1, p2) {
 
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   distance = R * c;
-  console.log(distance);
   return distance;
-
-  //Console.log("%f ",d, "background: blue; color: black; padding-left:10px;");
-  // returns the distance in meter
 };
 
 function clearMarkers() {
@@ -252,18 +365,39 @@ function addResult(result, i) {
    $.each($('.list-group-item'), (index, item) => {
     item.classList.remove('active')
    });
-   anchor.classList.add('class', 'active');
+   anchor.classList.add('active');
     google.maps.event.trigger(markers[i], 'click');
   });
   let icon = document.createElement('img');
   icon.src = result.icon;
   anchor.classList.add("list-group-item");
   icon.classList.add("placeIcon");
-  let name = document.createTextNode(result.name);
+  let name = document.createElement('span');
+  name.innerHTML = result.name;
+  name.classList.add('loc-name');
+  let lat = result.geometry.location.lat();
+  let lng = result.geometry.location.lng();
+  destination = new google.maps.LatLng(lat, lng);
+  let dist = document.createElement('span');
+  dist.classList.add('distance-from-src')
+  dist.innerHTML = convertUnits(getDistance(myLatlng, destination));
   anchor.appendChild(icon);
   anchor.appendChild(name);
+  anchor.appendChild(dist);
   return anchor;
 }
+
+function convertUnits(val) {
+  val = Math.round(val);
+  if (val > 1000) {
+    val = val/1000;
+    val = val.toFixed(1) + 'km';
+  } else { 
+    val += 'm';
+  }
+  return val;
+}
+
 
 function clearResults() {
   $('.panel-collapse').each(function(i, listPanels) {
@@ -311,7 +445,7 @@ function getIWContent(place) {
   content += '<table><tr><td>';
   content += '<img class="placeIcon" src="' + place.icon + '"/></td>';
   content += '<td><b><a href="' + place.url + '">' + place.name + '</a></b>';
-  content += '<td><b>' + ", Distance " + Math.round(distance) + "m" + '</b>';
+  content += '<td><b>' + ", Distance " + convertUnits(distance) + '</b>';
   content += '</td></tr></table>';
   return content;
 }
