@@ -1,3 +1,5 @@
+'use strict';
+
 $('.tree-toggle').click(function () {
   $(this).parent().children('ul.tree').toggle(200);
 });
@@ -5,7 +7,6 @@ $('.tree-toggle').click(function () {
 $(function () {
   $('.tree-toggle').parent().children('ul.tree').toggle(200);
 });
-
 
 var map, places, iw;
 var markers = [];
@@ -60,7 +61,6 @@ function ZoomControl(controlDiv, map) {
   google.maps.event.addDomListener(zoomOutButton, 'click', function () {
     map.setZoom(map.getZoom() - 1);
   });
-
 }
 
 function initialize() {
@@ -95,33 +95,27 @@ function initialize() {
       }]
     }],
     mapTypeId: google.maps.MapTypeId.ROADMAP
-  }
 
-  
-  
-  
-  /*googleMap.addMarker(new MarkerOptions()
-  .position(myLatlng)
-  .title("OZONE")
-  .showInfoWindow();
-  
-  
-  /*var images = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';*/
-  
-  
-  
-  //scaleControl: true
-  
+    /*googleMap.addMarker(new MarkerOptions()
+    .position(myLatlng)
+    .title("OZONE")
+    .showInfoWindow();
+    
+    
+    /*var images = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';*/
+
+    //scaleControl: true
+
+  };
   map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
   // var zoomControlDiv = document.createElement('div');
   // var zoomControl = new ZoomControl(zoomControlDiv, map);
-  
+
   // center reposition control
   var centerControlDiv = document.createElement('div');
   var centerControl = new CenterControl(centerControlDiv, map);
   centerControlDiv.index = 1;
   map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
-
 
   // zoom slider control
   var zoomControlDiv = document.createElement('div');
@@ -134,8 +128,6 @@ function initialize() {
   // map custom controls to map
   map.controls[google.maps.ControlPosition.BOTTOM].push(zoomControlDiv);
 
-
-  
   // zoomControlDiv.index = 1;
   // map.controls[google.maps.ControlPosition.BOTTOM_RIGHT].push(zoomControlDiv);
   places = new google.maps.places.PlacesService(map);
@@ -150,7 +142,7 @@ function CenterControl(controlDiv, map) {
 
   // Set CSS for the control border.
   var controlUI = document.createElement('div');
-  controlUI.classList.add('recenter-button')
+  controlUI.classList.add('recenter-button');
   controlUI.style.backgroundColor = '#fff';
   controlUI.style.border = '2px solid #fff';
   controlUI.style.borderRadius = '3px';
@@ -172,10 +164,9 @@ function CenterControl(controlDiv, map) {
   controlText.innerHTML = 'Center Map';
   controlUI.appendChild(controlText);
 
-  controlUI.addEventListener('click', function() {
+  controlUI.addEventListener('click', function () {
     map.setCenter(myLatlng, 10);
   });
-
 }
 
 function ZoomSliderControl(controlDiv, map, min, max, currentZoom) {
@@ -214,7 +205,6 @@ function ZoomSliderControl(controlDiv, map, min, max, currentZoom) {
   google.maps.event.addDomListener(controlUI, 'touchend', function () {
     map.setZoom(parseFloat(controlUI.value));
   });
-  
 
   google.maps.event.addDomListener(inccontrols, 'click', function () {
     map.setZoom(map.getZoom() + 1);
@@ -225,11 +215,10 @@ function ZoomSliderControl(controlDiv, map, min, max, currentZoom) {
   });
 
   // Set slider value on zoom change 
-  google.maps.event.addListener(map, 'zoom_changed', function(){
+  google.maps.event.addListener(map, 'zoom_changed', function () {
     controlUI.value = map.getZoom();
   });
 }
-
 
 function maiiw() {
   var beachMarker = new google.maps.Marker({
@@ -241,7 +230,7 @@ function maiiw() {
 }
 
 function tileSearch() {
-  let id = $('.in').first().attr('id').slice(-1);
+  var id = $('.in').first().attr('id').slice(-1);
   search(id);
 }
 
@@ -274,9 +263,9 @@ function transitLayer() {
 
 function search(index) {
   maiiw();
-  let type = '';
-  setTimeout(() => {
-    let txt = $('.panel-heading').not('.collapsed').find('a').text().toLowerCase();
+  var type = '';
+  setTimeout(function () {
+    var txt = $('.panel-heading').not('.collapsed').find('a').text().toLowerCase();
     type = txt.slice(-1) === 's' ? txt.slice(0, -1) : txt;
     if (type) {
       autocomplete.setBounds(map.getBounds());
@@ -288,12 +277,12 @@ function search(index) {
       }
       places.search(search, function (results, status) {
         if (status == google.maps.places.PlacesServiceStatus.OK) {
-          clearResults(); 
+          clearResults();
           clearMarkers();
-          let htmlList = '';
-          let parentDiv = $('#collapse' + index);
+          var htmlList = '';
+          var parentDiv = $('#collapse' + index);
           parentDiv = parentDiv.first();
-          parentDiv.css('max-height', (window.innerHeight / 3));
+          parentDiv.css('max-height', window.innerHeight / 3);
           parentDiv.css('overflow', 'auto');
           for (var i = 0; i < results.length; i++) {
             markers[i] = new google.maps.Marker({
@@ -304,12 +293,12 @@ function search(index) {
             google.maps.event.addListener(markers[i], 'click', getDetails(results[i], i));
             setTimeout(dropMarker(i), i * 100);
             parentDiv.append(addResult(results[i], i));
-          }          
+          }
         } else if (status === 'ZERO_RESULTS' && results.length === 0) {
           showZeroResult(txt);
           clearMarkers();
         }
-      })
+      });
     } else {
       showZeroResult(txt);
       clearMarkers();
@@ -319,8 +308,8 @@ function search(index) {
 
 function showZeroResult(txt) {
   clearResults();
-  let results =  $('.in').length === 0 ? $('.collapsing') : $('.in');
-  let anchor = document.createElement('a');
+  var results = $('.in').length === 0 ? $('.collapsing') : $('.in');
+  var anchor = document.createElement('a');
   anchor.classList.add("list-group-item");
   anchor.innerHTML = 'No ' + txt + ' nearby';
   results.html(anchor);
@@ -332,9 +321,7 @@ function getDistance(p1, p2) {
   var dLat = rad(p2.lat() - p1.lat());
   var dLong = rad(p2.lng() - p1.lng());
 
-  var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(rad(p1.lat())) * Math.cos(rad(p2.lat())) *
-    Math.sin(dLong / 2) * Math.sin(dLong / 2);
+  var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(rad(p1.lat())) * Math.cos(rad(p2.lat())) * Math.sin(dLong / 2) * Math.sin(dLong / 2);
 
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   distance = R * c;
@@ -353,31 +340,31 @@ function clearMarkers() {
 function dropMarker(i) {
   return function () {
     markers[i].setMap(map);
-  }
+  };
 }
 
 function addResult(result, i) {
-  let anchor = document.createElement('a');
-  anchor.href = 'javascript:void(0);'
+  var anchor = document.createElement('a');
+  anchor.href = 'javascript:void(0);';
   anchor.addEventListener('click', function () {
-   $.each($('.list-group-item'), (index, item) => {
-    item.classList.remove('active')
-   });
-   anchor.classList.add('active');
+    $.each($('.list-group-item'), function (index, item) {
+      item.classList.remove('active');
+    });
+    anchor.classList.add('active');
     google.maps.event.trigger(markers[i], 'click');
   });
-  let icon = document.createElement('img');
+  var icon = document.createElement('img');
   icon.src = result.icon;
   anchor.classList.add("list-group-item");
   icon.classList.add("placeIcon");
-  let name = document.createElement('span');
+  var name = document.createElement('span');
   name.innerHTML = result.name;
   name.classList.add('loc-name');
-  let lat = result.geometry.location.lat();
-  let lng = result.geometry.location.lng();
+  var lat = result.geometry.location.lat();
+  var lng = result.geometry.location.lng();
   destination = new google.maps.LatLng(lat, lng);
-  let dist = document.createElement('span');
-  dist.classList.add('distance-from-src')
+  var dist = document.createElement('span');
+  dist.classList.add('distance-from-src');
   dist.innerHTML = convertUnits(getDistance(myLatlng, destination));
   anchor.appendChild(icon);
   anchor.appendChild(name);
@@ -388,19 +375,18 @@ function addResult(result, i) {
 function convertUnits(val) {
   val = Math.round(val);
   if (val > 1000) {
-    val = val/1000;
+    val = val / 1000;
     val = val.toFixed(1) + 'km';
-  } else { 
+  } else {
     val += 'm';
   }
   return val;
 }
 
-
 function clearResults() {
-  $('.panel-collapse').each(function(i, listPanels) {
+  $('.panel-collapse').each(function (i, listPanels) {
     listPanels.innerHTML = '';
-});
+  });
 }
 
 function getDetails(result, i) {
@@ -408,12 +394,11 @@ function getDetails(result, i) {
     places.getDetails({
       reference: result.reference
     }, showInfoWindow(i));
-  }
+  };
 }
-var rad = function (x) {
+var rad = function rad(x) {
   return x * Math.PI / 180;
 };
-
 
 function showInfoWindow(i) {
   return function (place, status) {
@@ -432,10 +417,8 @@ function showInfoWindow(i) {
         content: getIWContent(place)
       });
       iw.open(map, markers[i]);
-
-
     }
-  }
+  };
 }
 
 function getIWContent(place) {
@@ -450,22 +433,9 @@ function getIWContent(place) {
 
 function loadMenu() {
   $('#accordion').html('');
-  let panel = ''
-  $.each(menuItems, (index, item) => {
-    panel += `<div class="panel panel-default">
-                  <div class="panel-heading ${ index > 0 ? 'collapsed' : '' }" onclick="search(${ index + 1 })" data-toggle="collapse" data-parent="#accordion" href="#collapse${ index + 1 }">
-                      <h4 class="panel-title">
-                        <a>${ item }</a>
-                      </h4>
-                    </div>
-                    <div id="collapse${ index + 1 }" class="panel-collapse ${ index === 0 ? 'collapse in' : '' }">
-                      <div class="panel-body">
-                        <div class="list-group result-group">
-                        </div>
-                      </div>
-                    </div>
-                  </div>`;
+  var panel = '';
+  $.each(menuItems, function (index, item) {
+    panel += '<div class="panel panel-default">\n                  <div class="panel-heading ' + (index > 0 ? 'collapsed' : '') + '" onclick="search(' + (index + 1) + ')" data-toggle="collapse" data-parent="#accordion" href="#collapse' + (index + 1) + '">\n                      <h4 class="panel-title">\n                        <a>' + item + '</a>\n                      </h4>\n                    </div>\n                    <div id="collapse' + (index + 1) + '" class="panel-collapse ' + (index === 0 ? 'collapse in' : '') + '">\n                      <div class="panel-body">\n                        <div class="list-group result-group">\n                        </div>\n                      </div>\n                    </div>\n                  </div>';
   });
   $('#accordion').html(panel);
-
 }
