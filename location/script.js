@@ -77,7 +77,7 @@ function initialize() {
     scrollwheel: false,
     zoomControl: false,
     minZoom: 5,
-    maxZoom: 20,
+    maxZoom: 22,
     zoomControlOptions: {
       style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
       position: google.maps.ControlPosition.BOTTOM
@@ -125,13 +125,13 @@ function initialize() {
 
   // zoom slider control
   var zoomControlDiv = document.createElement('div');
-  zoomControlDiv.setAttribute("class", "gm-custom-controlls");
+  zoomControlDiv.setAttribute("class", "gm-custom-controls");
   zoomControlDiv.index = 1;
 
-  // Add custom zoom controlls
+  // Add custom zoom controls
   var centerControl = new ZoomSliderControl(zoomControlDiv, map, map.minZoom, map.maxZoom, map.zoom);
 
-  // map custom controlls to map
+  // map custom controls to map
   map.controls[google.maps.ControlPosition.BOTTOM].push(zoomControlDiv);
 
 
@@ -188,22 +188,20 @@ function ZoomSliderControl(controlDiv, map, min, max, currentZoom) {
   controlUI.value = currentZoom;
   controlUI.min = min;
   controlUI.max = max;
-  controlUI.style.width = "400px";
+  controlUI.style.width = window.innerWidth / 3;
 
-  // Add zoom controlls
-  var incControlls = document.createElement('div');
-  incControlls.id = 'gm-zoom-inc';
-  incControlls.classList.add('zoom-button');
-  incControlls.innerHTML = '+';
+  // Add zoom controls
+  var inccontrols = document.createElement('div');
+  inccontrols.id = 'gm-zoom-inc';
+  inccontrols.classList.add('zoom-button');
 
-  var decControlls = document.createElement('div');
-  decControlls.id = 'gm-zoom-dec';
-  decControlls.classList.add('zoom-button');
-  decControlls.innerHTML = '-';
+  var deccontrols = document.createElement('div');
+  deccontrols.id = 'gm-zoom-dec';
+  deccontrols.classList.add('zoom-button');
 
-  parentDiv.appendChild(decControlls);
+  parentDiv.appendChild(deccontrols);
   parentDiv.appendChild(controlUI);
-  parentDiv.appendChild(incControlls);
+  parentDiv.appendChild(inccontrols);
 
   controlDiv.appendChild(parentDiv);
 
@@ -218,11 +216,11 @@ function ZoomSliderControl(controlDiv, map, min, max, currentZoom) {
   });
   
 
-  google.maps.event.addDomListener(incControlls, 'click', function () {
+  google.maps.event.addDomListener(inccontrols, 'click', function () {
     map.setZoom(map.getZoom() + 1);
   });
 
-  google.maps.event.addDomListener(decControlls, 'click', function () {
+  google.maps.event.addDomListener(deccontrols, 'click', function () {
     map.setZoom(map.getZoom() + -1);
   });
 
